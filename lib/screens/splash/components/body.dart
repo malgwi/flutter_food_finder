@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_finder/components/default_button.dart';
+import 'package:food_finder/screens/loading/loading_screen.dart';
 import 'package:food_finder/screens/splash/components/splash_content.dart';
 
 import '../../../constants.dart';
@@ -67,7 +68,9 @@ class _BodyState extends State<Body> {
                     Spacer(flex: 3),
                     DefaultButton(
                       text: 'Continue',
-                      press: () {},
+                      press: () {
+                        Navigator.pushNamed(context, LoadingScreen.id);
+                      },
                     ),
                     Spacer(),
                   ],

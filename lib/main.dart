@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Restaurant Finder',
       theme: theme(),
       initialRoute: SplashScreen.id,
       routes: routes,
