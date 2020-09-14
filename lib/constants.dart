@@ -14,3 +14,11 @@ const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 
 const kAnimationDuration = Duration(milliseconds: 200);
+
+const apiKey = 'AIzaSyCEmwxmlguTjbKuhVJRdTHyyl02es2S8J4';
+const BASE_URL =
+    'https://maps.googleapis.com/maps/api/place/nearbysearch/json?';
+
+const kRadius = 1500;
+const kType = "restaurant";
+const kKeyword = "food";
