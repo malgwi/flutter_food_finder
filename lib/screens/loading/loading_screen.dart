@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:food_finder/models/models.dart';
 import 'package:food_finder/services/place_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../constants.dart';
 
@@ -13,12 +14,37 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   PlaceService _placeService;
+  Position _currentPosition;
+  String _currentAddress;
 
   @override
   void initState() {
+    super.initState();
     _placeService = PlaceService();
+    _getCurrentLocation();
   }
+
+  Future<dynamic> _getCurrentLocation() async {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        if(position != null) {
+
+          _currentPosition = position;
+          print('current location: ${_currentPosition.latitude}, ${_currentPosition.longitude}');
+
+        }
+      });
+
+      // _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +53,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         child: Container(
           child: FutureBuilder(
               future:
-                  _placeService.getPlaces(lat: "9.6062091", long: "6.5297235"),
+              _placeService.getPlaces(lat: _currentPosition.latitude.toString(), long: _currentPosition.longitude.toString()),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
