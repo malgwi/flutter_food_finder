@@ -1,17 +1,17 @@
 class PlaceResponse {
-   String status;
-   List<Result> results;
+  String status;
+  List<Result> results;
 
   PlaceResponse({this.status, this.results});
 
-  PlaceResponse.fromJson(Map<String, dynamic> json){
-     status = json["status"];
-     if (json['results'] != null) {
-       results = new List<Result>();
-       json['results'].forEach((v) {
-         results.add(new Result.fromJson(v));
-       });
-     }
+  PlaceResponse.fromJson(Map<String, dynamic> json) {
+    status = json["status"];
+    if (json['results'] != null) {
+      results = new List<Result>();
+      json['results'].forEach((v) {
+        results.add(new Result.fromJson(v));
+      });
+    }
   }
 }
 

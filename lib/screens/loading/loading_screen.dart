@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:food_finder/models/models.dart';
 import 'package:food_finder/services/place_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../../constants.dart';
 
@@ -31,11 +32,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
-        if(position != null) {
-
+        if (position != null) {
           _currentPosition = position;
-          print('current location: ${_currentPosition.latitude}, ${_currentPosition.longitude}');
-
+          print(
+              'current location: ${_currentPosition.latitude}, ${_currentPosition.longitude}');
         }
       });
 
@@ -45,15 +45,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
           child: FutureBuilder(
-              future:
-              _placeService.getPlaces(lat: _currentPosition.latitude.toString(), long: _currentPosition.longitude.toString()),
+              future: _placeService.getPlaces(
+                  lat: _currentPosition.latitude.toString(),
+                  long: _currentPosition.longitude.toString()),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
@@ -84,12 +84,12 @@ class PlaceList extends StatefulWidget {
 class _PlaceListState extends State<PlaceList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemCount: widget.result.length,
+    return ListView.builder(
+        itemCount: widget.result.length,
         itemBuilder: (BuildContext context, int index) {
           final result = widget.result[index];
           return PlaceCard(name: result.name, rating: result.rating);
-        }
-    );
+        });
   }
 }
 
@@ -105,16 +105,48 @@ class PlaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
-        children: [
-//          Image.network(icon),
-          Column(
-            children: [
-              Text(name),
-              Text(rating)
-            ],
-          )
-        ],
+      color: kPrimaryColor,
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Image.network(
+              'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png',
+              color: Colors.white,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(height: 10),
+                SmoothStarRating(
+                  allowHalfRating: false,
+                  onRated: (v) {},
+                  starCount: 5,
+                  rating: double.parse(rating),
+                  size: 20.0,
+                  isReadOnly: true,
+                  color: Colors.white,
+                  borderColor: Colors.white,
+                  spacing: 0.0,
+                ),
+                Text(
+                  'Rating Star: $rating',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
