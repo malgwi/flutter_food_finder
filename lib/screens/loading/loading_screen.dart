@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:food_finder/models/models.dart';
 import 'package:food_finder/services/place_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-import '../../constants.dart';
+import 'package:food_finder/constants.dart';
 
 class LoadingScreen extends StatefulWidget {
   static const String id = 'loading_screen';
@@ -18,7 +17,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   PlaceService _placeService;
   Position _currentPosition;
-  String _currentAddress;
 
   @override
   void initState() {
@@ -28,15 +26,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   Future<dynamic> _getCurrentLocation() async {
-    geolocator
+    await geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
-        if (position != null) {
-          _currentPosition = position;
-          print(
-              'current location: ${_currentPosition.latitude}, ${_currentPosition.longitude}');
-        }
+        _currentPosition = position;
       });
 
       // _getAddressFromLatLng();
@@ -51,29 +45,34 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: SafeArea(
         child: Container(
           child: FutureBuilder(
-              future: _placeService.getPlaces(
-                  lat: _currentPosition.latitude.toString(),
-                  long: _currentPosition.longitude.toString()),
+              future:
+                  // _placeService.getPlaces(lat: "9.6062091", long: "6.5297235"),
+                  _placeService.getPlaces(
+                lat: _currentPosition != null
+                    ? _currentPosition.latitude.toString()
+                    : 'Waiting Latitude',
+                long: _currentPosition != null
+                    ? _currentPosition.longitude.toString()
+                    : 'Waiting Longitude',
+              ),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
                     ? PlaceList(result: snapshot.data)
-                    : Container(child: Text("No Data"));
+                    : Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: kPrimaryColor,
+                        ),
+                      );
               }),
         ),
       ),
-//      body: Center(
-//        child: SpinKitFoldingCube(
-//          color: kPrimaryColor,
-//          size: 100.0,
-//        ),
-//      ),
     );
   }
 }
 
 class PlaceList extends StatefulWidget {
-  List<Result> result;
+  final List<Result> result;
 
   PlaceList({Key key, this.result}) : super(key: key);
 
@@ -82,22 +81,29 @@ class PlaceList extends StatefulWidget {
 }
 
 class _PlaceListState extends State<PlaceList> {
+  final String icon =
+      'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png';
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         itemCount: widget.result.length,
         itemBuilder: (BuildContext context, int index) {
           final result = widget.result[index];
-          return PlaceCard(name: result.name, rating: result.rating);
+          return PlaceCard(
+            name: result.name,
+            rating: result.rating,
+            icon: icon,
+          );
         });
   }
 }
 
 class PlaceCard extends StatelessWidget {
-  String name;
-  String icon;
-  String rating;
-  bool openNow;
+  final String name;
+  final String icon;
+  final String rating;
+  final bool openNow;
 
   PlaceCard({Key key, this.name, this.icon, this.rating, this.openNow})
       : super(key: key);
@@ -111,7 +117,7 @@ class PlaceCard extends StatelessWidget {
         child: Row(
           children: [
             Image.network(
-              'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png',
+              icon,
               color: Colors.white,
             ),
             Column(
@@ -121,7 +127,7 @@ class PlaceCard extends StatelessWidget {
                   name,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
                 SizedBox(height: 10),
