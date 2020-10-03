@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:food_finder/models/models.dart';
+import 'package:food_finder/screens/view_restaurant.dart';
 import 'package:food_finder/services/place_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -96,6 +97,7 @@ class _PlaceListState extends State<PlaceList> {
             name: result.name,
             rating: result.rating,
             icon: icon,
+            vicinity: result.vicinity,
           );
         });
   }
@@ -105,23 +107,81 @@ class PlaceCard extends StatelessWidget {
   final String name;
   final String icon;
   final String rating;
+  final String vicinity;
   final bool openNow;
 
-  PlaceCard({Key key, this.name, this.icon, this.rating, this.openNow})
+  PlaceCard(
+      {Key key, this.vicinity, this.name, this.icon, this.rating, this.openNow})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: kPrimaryColor,
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Image.network(
-              icon,
-              color: Colors.white,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Restaurant(
+              name: name,
+              rating: rating,
+              icon: icon,
+              vicinity: vicinity,
             ),
+          ),
+        );
+      },
+      child: Card(
+        color: kPrimaryColor,
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Image.network(
+                    icon,
+                    color: Colors.white,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SmoothStarRating(
+                        allowHalfRating: false,
+                        onRated: (v) {},
+                        starCount: 5,
+                        rating: double.parse(rating),
+                        size: 20.0,
+                        isReadOnly: true,
+                        color: Colors.white,
+                        borderColor: Colors.white,
+                        spacing: 0.0,
+                      ),
+                      Text(
+                        'Rating Star: $rating',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+              )
+            ],
+          ),
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
