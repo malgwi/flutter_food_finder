@@ -18,15 +18,16 @@ class PlaceResponse {
 class Result {
   String icon;
   String name;
+  String vicinity;
   String rating;
   bool openingNow;
 
-  Result({this.icon, this.name, this.rating, this.openingNow});
+  Result({this.vicinity, this.icon, this.name, this.rating, this.openingNow});
 
   Result.fromJson(Map<String, dynamic> json) {
     icon = json['icon'];
     name = json['name'];
+    vicinity = json['vicinity'];
     rating = json['rating'].toString();
-//    openingNow = json['opening_hours']['open_now'];
   }
 }

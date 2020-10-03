@@ -95,6 +95,7 @@ class _PlaceListState extends State<PlaceList> {
             name: result.name,
             rating: result.rating,
             icon: icon,
+            vicinity: result.vicinity,
           );
         });
   }
@@ -104,9 +105,11 @@ class PlaceCard extends StatelessWidget {
   final String name;
   final String icon;
   final String rating;
+  final String vicinity;
   final bool openNow;
 
-  PlaceCard({Key key, this.name, this.icon, this.rating, this.openNow})
+  PlaceCard(
+      {Key key, this.vicinity, this.name, this.icon, this.rating, this.openNow})
       : super(key: key);
 
   @override
@@ -120,6 +123,7 @@ class PlaceCard extends StatelessWidget {
               name: name,
               rating: rating,
               icon: icon,
+              vicinity: vicinity,
             ),
           ),
         );

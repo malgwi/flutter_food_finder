@@ -8,9 +8,11 @@ class Restaurant extends StatelessWidget {
   final String name;
   final String icon;
   final String rating;
+  final String vicinity;
 
   const Restaurant({
     Key key,
+    this.vicinity,
     @required this.name,
     this.icon,
     @required this.rating,
@@ -23,24 +25,47 @@ class Restaurant extends StatelessWidget {
         body: Padding(
           padding: EdgeInsets.all(8.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 icon,
                 color: kPrimaryColor,
               ),
-              Flexible(
+              Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(
-                      child: Text(
-                        name.toUpperCase(),
+                      child: FittedBox(
+                        child: Text(
+                          name.toUpperCase(),
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Address: ',
                         style: TextStyle(
                           color: kPrimaryColor,
-                          fontSize: 25,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
+                        children: [
+                          TextSpan(
+                            text: '$vicinity' ?? '',
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 10),
