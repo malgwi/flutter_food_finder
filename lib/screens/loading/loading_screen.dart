@@ -137,44 +137,48 @@ class PlaceCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.network(
-                    icon,
-                    color: Colors.white,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
+              Flexible(
+                child: Row(
+                  children: [
+                    Image.network(
+                      icon,
+                      color: Colors.white,
+                    ),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SmoothStarRating(
+                            allowHalfRating: false,
+                            onRated: (v) {},
+                            starCount: 5,
+                            rating: double.parse(rating),
+                            size: 20.0,
+                            isReadOnly: true,
+                            color: Colors.white,
+                            borderColor: Colors.white,
+                            spacing: 0.0,
+                          ),
+                          Text(
+                            'Rating Star: $rating',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 10),
-                      SmoothStarRating(
-                        allowHalfRating: false,
-                        onRated: (v) {},
-                        starCount: 5,
-                        rating: double.parse(rating),
-                        size: 20.0,
-                        isReadOnly: true,
-                        color: Colors.white,
-                        borderColor: Colors.white,
-                        spacing: 0.0,
-                      ),
-                      Text(
-                        'Rating Star: $rating',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
               Icon(
                 Icons.arrow_forward_ios,
